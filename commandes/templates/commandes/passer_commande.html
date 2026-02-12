@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Passer une commande</title>
+</head>
+<body>
+    <h1>Passer une commande</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <h2>Client</h2>
+        {{ form_commande.as_p }}
+
+        <h2>Plats</h2>
+        {{ formset_lignes.management_form }}
+        {% for form in formset_lignes %}
+            <div style="margin-bottom: 10px; border: 1px solid #ccc; padding: 5px;">
+                {{ form.as_p }}
+                {% if form.instance.pk %}
+                    <label>Supprimer: {{ form.DELETE }}</label>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit">Valider la commande</button>
+    </form>
+</body>
+</html>

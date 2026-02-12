@@ -13,7 +13,7 @@ class Plat(models.Model):
     prix = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
-        return self.nom
+        return f"{self.nom}({self.prix}F)"
 
 
 class Commande(models.Model):
@@ -21,8 +21,26 @@ class Commande(models.Model):
     date_commande = models.DateTimeField(auto_now_add=True)
     plats = models.ManyToManyField(Plat, through='LigneCommande')
 
+    STATUT_CHOICES = [
+        ('EN_ATTENTE', 'En attente'),
+        ('PAYEE', 'Payée'),
+        ('LIVREE', 'Livrée'),
+    ]
+    statut = models.CharField(
+        max_length=20,
+        choices=STATUT_CHOICES,
+        default='EN_ATTENTE'
+    )
+
     def __str__(self):
         return f"Commande {self.id} - {self.client.nom}"
+    
+    def total_commande(self):
+        total = 0
+        for ligne in self.lignecommande_set.all():
+            total += ligne.plat.prix * ligne.quantite
+        return total
+
 
 
 class LigneCommande(models.Model):
@@ -32,3 +50,6 @@ class LigneCommande(models.Model):
 
     def __str__(self):
         return f"{self.plat.nom} x {self.quantite}"
+    
+    def sous_total(self):
+        return self.plat.prix * self.quantite

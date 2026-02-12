@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Plats</title>
+</head>
+<body>
+    <h1>Nos Plats</h1>
+    <Ul>
+        {% for plat in plats %}
+            <li>
+                {{ plat.nom }} - {{ plat.prix }} F
+                <a href="{% url 'detail_plat' plat.id %}">Voir</a>
+            </li>
+        {% endfor %}
+    </Ul>
+</body>
+</html>
