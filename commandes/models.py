@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Client(models.Model):
     nom = models.CharField(max_length=100)
@@ -11,7 +12,8 @@ class Client(models.Model):
 class Plat(models.Model):
     nom = models.CharField(max_length=100)
     prix = models.DecimalField(max_digits=8, decimal_places=2)
-
+    
+    
     def __str__(self):
         return f"{self.nom}({self.prix}F)"
 
@@ -20,7 +22,7 @@ class Commande(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     date_commande = models.DateTimeField(auto_now_add=True)
     plats = models.ManyToManyField(Plat, through='LigneCommande')
-
+    statut = models.CharField(max_length=20, default='En cours')
     STATUT_CHOICES = [
         ('EN_ATTENTE', 'En attente'),
         ('PAYEE', 'Payée'),

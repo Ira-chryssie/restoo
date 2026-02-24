@@ -16,8 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from commandes import views
+from commandes.serializers import MyTokenObtainPairView
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('commandes.urls')),
+    path('commandes/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]

@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import Client, Plat, Commande, LigneCommande
 
-
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     list_display = ('nom', 'telephone')

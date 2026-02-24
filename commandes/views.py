@@ -1,37 +1,38 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Plat, Client, Commande, LigneCommande
-from django.shortcuts import render, redirect
-from .forms import CommandeForm, LigneCommandeFormSet
-from .models import Commande
+from django.contrib.auth.models import User
+from rest_framework import viewsets
+from .models import *
+from .serializers import *
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
-def liste_plats(request):
-    plats = Plat.objects.all()  # récupère tous les plats
-    return render(request, 'plats/liste_plats.html', {'plats': plats})
+class CommandeViewSet(viewsets.ModelViewSet):
+    queryset = Commande.objects.all()
+    serializer_class = CommandeSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['client','plats']
 
-def detail_plat(request, plat_id):
-    plat = get_object_or_404(Plat, id=plat_id)
-    return render(request, 'plats/detail_plat.html', {'plat': plat})
-def liste_commandes(request):
-    commandes = Commande.objects.all()
-    return render(request, 'commandes/liste_commandes.html', {'commandes': commandes})
-def passer_commande(request):
-    if request.method == 'POST':
-        form_commande = CommandeForm(request.POST)
-        formset_lignes = LigneCommandeFormSet(request.POST)
 
-        if form_commande.is_valid() and formset_lignes.is_valid():
-            commande = form_commande.save()  # sauvegarde la commande
+class PlatViewSet(viewsets.ModelViewSet):
+    queryset = Plat.objects.all()
+    serializer_class = PlatSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = [ 'prix']
+    permission_classes = [IsAuthenticatedOrReadOnly]  
 
-            lignes = formset_lignes.save(commit=False)
-            for ligne in lignes:
-                ligne.commande = commande  # lier la ligne à la commande
-                ligne.save()
-            return redirect('liste_commandes')  # après validation, redirige vers la liste des commandes
-    else:
-        form_commande = CommandeForm()
-        formset_lignes = LigneCommandeFormSet()
+class LigneCommandeViewSet(viewsets.ModelViewSet):
+    queryset = LigneCommande.objects.all()
+    serializer_class = LigneCommandeSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['commande', 'plat']
+    permission_classes = [IsAuthenticatedOrReadOnly]  
 
-    return render(request, 'commandes/passer_commande.html', {
-        'form_commande': form_commande,
-        'formset_lignes': formset_lignes
-    })
+class ClientViewSet(viewsets.ModelViewSet):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['nom']
+    filterset_fields = {
+        'nom': ['exact', 'icontains'],   
+    }
+    permission_classes = [IsAuthenticatedOrReadOnly]
