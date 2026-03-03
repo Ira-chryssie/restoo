@@ -12,8 +12,8 @@ class Client(models.Model):
 class Plat(models.Model):
     nom = models.CharField(max_length=100)
     prix = models.DecimalField(max_digits=8, decimal_places=2)
-    
-    
+    categorie = models.CharField(max_length=50, default='Plat')  # ← ajoutez cette ligne
+
     def __str__(self):
         return f"{self.nom}({self.prix}F)"
 
