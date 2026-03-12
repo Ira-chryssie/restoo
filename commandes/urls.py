@@ -11,9 +11,9 @@ router.register(r'lignecommandes', views.LigneCommandeViewSet)
 router.register(r'clients', views.ClientViewSet)
 
 urlpatterns = [
-    path('commandes/', include(router.urls)),
-    path('commandes/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('commandes/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('commandes/inscription/', views.inscription, name='inscription'),
+    path('', include(router.urls)),
+    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('inscription/', views.inscription, name='inscription'),
     path('api-auth/', include('rest_framework.urls')),
 ]
