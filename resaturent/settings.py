@@ -52,12 +52,10 @@ SIMPLE_JWT = {
     'TOKEN_OBTAIN_SERIALIZER': 'commandes.serializers.MyTokenObtainPairSerializer',
 }
 
-
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-    'whitenoise.middleware.WhiteNoiseMiddleware'
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -66,12 +64,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'resaturent.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['build'],
         'DIRS': [BASE_DIR / 'build'],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -147,7 +145,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'rest_framework.authentication.SessionAuthentication',
     ],
 }
 
@@ -158,4 +157,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5176",
     "https://irishura.amidev.bi",   
     "http://irishura.amidev.bi",    
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://irishura.amidev.bi',
+    'http://irishura.amidev.bi',
 ]
